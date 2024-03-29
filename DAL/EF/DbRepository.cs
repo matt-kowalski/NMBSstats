@@ -9,7 +9,7 @@ public class DbRepository : IRepository
     public DbRepository(TrainAppDbContext dbContext)
     {
         _dbContext = dbContext;
-        if (!dbContext.IsInitialized)
+        if (!dbContext.Agencies.Any())
         {
             GtfsSeeder.Seed(this);
         }
@@ -49,9 +49,9 @@ public class DbRepository : IRepository
         return calendar;
     }
 
-    public CalendarDate ReadCalendarDate(Guid serviceId, DateOnly date)
+    public CalendarDate ReadCalendarDate(Guid calendarId, DateOnly date)
     {
-        return _dbContext.CalendarDates.Find(serviceId, date) ?? throw new KeyNotFoundException();
+        return _dbContext.CalendarDates.Find(calendarId, date) ?? throw new KeyNotFoundException();
     }
 
     public CalendarDate CreateCalendarDate(CalendarDate calendarDate)
@@ -106,10 +106,10 @@ public class DbRepository : IRepository
         return route;
     }
 
-    public StopTimeOverride ReadStopTimeOverride(Guid tripId, Guid serviceId, uint stopSequence)
+    public StopTimeOverride ReadStopTimeOverride(Guid tripId, Guid calendarId, uint stopSequence)
     {
         return _dbContext.StopTimeOverrides.Single(sto => sto.Trip.Id == tripId &&
-                                                          sto.Calendar.Id == serviceId &&
+                                                          sto.Calendar.Id == calendarId &&
                                                           sto.StopSequence == stopSequence) ?? throw new KeyNotFoundException();
     }
 
@@ -165,6 +165,13 @@ public class DbRepository : IRepository
                                String.Equals(s.Name, translated.FieldValue, StringComparison.OrdinalIgnoreCase)) ?? throw new KeyNotFoundException();
     }
 
+    public string ReadTranslatedStopName(string name, string language)
+    {
+        string? translation = _dbContext.Translations.Find(TableType.Stops, "stop_name", language, name)?.TranslatedValue;
+        if (String.IsNullOrEmpty(translation)) throw new KeyNotFoundException();
+        return translation;
+    }
+
     public Trip ReadTrip(Guid id)
     {
         return _dbContext.Trips.Find(id) ?? throw new KeyNotFoundException();
@@ -179,9 +186,9 @@ public class DbRepository : IRepository
         return trip;
     }
 
-    public Shape ReadShape(Guid id)
+    public Shape ReadShape(Guid id, uint pointSequence)
     {
-        return _dbContext.Shapes.Find(id) ?? throw new KeyNotFoundException();
+        return _dbContext.Shapes.Find(id, pointSequence) ?? throw new KeyNotFoundException();
     }
 
     public Shape CreateShape(Shape shape)

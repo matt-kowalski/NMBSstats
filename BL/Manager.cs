@@ -12,22 +12,10 @@ public class Manager : IManager
     {
         _rep = repository;
     }
-    
+
     public Agency GetAgency(Guid id)
     {
         return _rep.ReadAgency(id);
-    }
-
-    public Agency AddAgency(string name, string url, TimeZoneInfo timezone, string language)
-    {
-        Agency agency = new Agency()
-        {
-            Name = name,
-            Url = url,
-            Timezone = timezone,
-            Language = language
-        };
-        return _rep.CreateAgency(agency);
     }
 
     public Calendar GetCalendar(Guid id)
@@ -35,37 +23,9 @@ public class Manager : IManager
         return _rep.ReadCalendar(id);
     }
 
-    public Calendar AddCalendar(Monday monday, Tuesday tuesday, Wednesday wednesday, Thursday thursday, Friday friday,
-        Saturday saturday, Sunday sunday, DateOnly startDate, DateOnly endDate)
+    public CalendarDate GetCalendarDate(Guid calendarId, DateOnly date)
     {
-        Calendar calendar = new Calendar()
-        {
-            Monday = monday,
-            Tuesday = tuesday,
-            Wednesday = wednesday,
-            Thursday = thursday,
-            Friday = friday,
-            Saturday = saturday,
-            Sunday = sunday,
-            StartDate = startDate,
-            EndDate = endDate
-        };
-        return _rep.CreateCalendar(calendar);
-    }
-
-    public CalendarDate GetCalendarDate(Guid serviceId, DateOnly date)
-    {
-        return _rep.ReadCalendarDate(serviceId, date);
-    }
-
-    public CalendarDate AddCalendarDate(DateOnly date, DateExceptionType dateException)
-    {
-        CalendarDate calendarDate = new CalendarDate()
-        {
-            Date = date,
-            DateException = dateException
-        };
-        return _rep.CreateCalendarDate(calendarDate);
+        return _rep.ReadCalendarDate(calendarId, date);
     }
 
     public Transfer GetTransfer(Guid fromStopId, Guid toStopId)
@@ -73,36 +33,9 @@ public class Manager : IManager
         return _rep.ReadTransfer(fromStopId, toStopId);
     }
 
-    public Transfer AddTransfer(Guid fromStopId, Guid toStopId, TransferType transferType, uint? minTransferTime = null)
-    {
-        Transfer transfer = new Transfer()
-        {
-            FromStopId = fromStopId,
-            ToStopId = toStopId,
-            TransferType = transferType,
-            MinTransferTime = minTransferTime
-        };
-        return _rep.CreateTransfer(transfer);
-    }
-
-    public Translation GetTranslation(string language, string fieldValue, TableType tableType = TableType.Stops,
-        string fieldName = "stop_name")
+    public Translation GetTranslation(TableType tableType, string fieldName, string language, string fieldValue)
     {
         return _rep.ReadTranslation(tableType, fieldName, language, fieldValue);
-    }
-
-    public Translation AddTranslation(TableType tableType, string fieldName, string language, string translatedValue,
-        string fieldValue)
-    {
-        Translation translation = new Translation()
-        {
-            TableType = tableType,
-            FieldName = fieldName,
-            Language = language,
-            TranslatedValue = translatedValue,
-            FieldValue = fieldValue
-        };
-        return _rep.CreateTranslation(translation);
     }
 
     public Route GetRoute(Guid id)
@@ -110,33 +43,9 @@ public class Manager : IManager
         return _rep.ReadRoute(id);
     }
 
-    public Route AddRoute(Guid agencyId, string shortName, string longName, RouteType routeType)
+    public StopTimeOverride GetStopTimeOverride(Guid tripId, Guid calendarId, uint stopSequence)
     {
-        Route route = new Route()
-        {
-            AgencyId = agencyId,
-            ShortName = shortName,
-            LongName = longName,
-            RouteType = routeType
-        };
-        return _rep.CreateRoute(route);
-    }
-
-    public StopTimeOverride GetStopTimeOverride(Guid tripId, Guid serviceId, uint stopSequence)
-    {
-        return _rep.ReadStopTimeOverride(tripId, serviceId, stopSequence);
-    }
-
-    public StopTimeOverride AddStopTimeOverride(Guid tripId, Guid serviceId, uint stopSequence, Guid stopId)
-    {
-        StopTimeOverride stopTimeOverride = new StopTimeOverride()
-        {
-            TripId = tripId,
-            ServiceId = serviceId,
-            StopSequence = stopSequence,
-            StopId = stopId
-        };
-        return _rep.CreateStopTimeOverride(stopTimeOverride);
+        return _rep.ReadStopTimeOverride(tripId, calendarId, stopSequence);
     }
 
     public StopTime GetStopTime(Guid tripId, uint stopSequence)
@@ -144,45 +53,19 @@ public class Manager : IManager
         return _rep.ReadStopTime(tripId, stopSequence);
     }
 
-    public StopTime AddStopTime(Guid tripId, TimeOnly arrivalTime, TimeOnly departureTime, Guid stopId, uint stopSequence,
-        PickupType pickupType, DropoffType dropoffType)
-    {
-        StopTime stopTime = new StopTime()
-        {
-            TripId = tripId,
-            ArrivalTime = arrivalTime,
-            DepartureTime = departureTime,
-            StopId = stopId,
-            StopSequence = stopSequence,
-            PickupType = pickupType,
-            DropoffType = dropoffType
-        };
-        return _rep.CreateStopTime(stopTime);
-    }
-
     public Stop GetStop(Guid id)
     {
         return _rep.ReadStop(id);
     }
 
-    public Stop AddStop(string name, double latitude, double longitude, LocationType locationType, Guid? parentStationStopId = null,
-        string? platformCode = null)
-    {
-        Stop stop = new Stop()
-        {
-            Name = name,
-            Latitude = latitude,
-            Longitude = longitude,
-            LocationType = locationType,
-            ParentStationStopId = parentStationStopId,
-            PlatformCode = platformCode
-        };
-        return _rep.CreateStop(stop);
-    }
-
-    public Stop GetStopByName(string name, string language = "nl")
+    public Stop GetStopByName(string name, string language)
     {
         return _rep.ReadStopByName(name, language);
+    }
+
+    public string GetTranslatedStopName(string name, string language = "nl")
+    {
+        return _rep.ReadTranslatedStopName(name, language);
     }
 
     public Trip GetTrip(Guid id)
@@ -190,21 +73,12 @@ public class Manager : IManager
         return _rep.ReadTrip(id);
     }
 
-    public Trip AddTrip(Guid routeId, Guid serviceId, string headsign, string shortName, Guid blockId, TripType tripType)
+    public Shape GetShape(Guid id, uint pointSequence)
     {
-        Trip trip = new Trip()
-        {
-            RouteId = routeId,
-            ServiceId = serviceId,
-            Headsign = headsign,
-            ShortName = shortName,
-            BlockId = blockId,
-            TripType = tripType
-        };
-        return _rep.CreateTrip(trip);
+        return _rep.ReadShape(id, pointSequence);
     }
 
-    public List<Stop> GetAllStations()
+    public IEnumerable<Stop> GetAllStations()
     {
         return _rep.ReadAllStations();
     }

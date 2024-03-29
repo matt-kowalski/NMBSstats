@@ -22,7 +22,7 @@ public class Trip
 
     [Required]
     public string TrainName { get; set; }
-    public Shape Shape { get; set; }
+    public Guid ShapeId { get; set; }
     public Guid BlockId { get; set; }
 
     public override string ToString()

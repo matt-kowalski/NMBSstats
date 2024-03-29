@@ -1,4 +1,6 @@
-﻿namespace TrainApp.DAL.IMR;
+﻿using Microsoft.EntityFrameworkCore.ValueGeneration;
+
+namespace TrainApp.DAL.IMR;
 
 using Domain.GTFS;
 
@@ -63,9 +65,9 @@ public class InMemoryRepository : IRepository
         return calendar;
     }
 
-    public CalendarDate ReadCalendarDate(Guid serviceId, DateOnly date)
+    public CalendarDate ReadCalendarDate(Guid calendarId, DateOnly date)
     {
-        return CalendarDates.Find(cd => cd.Calendar.Id == serviceId && 
+        return CalendarDates.Find(cd => cd.Calendar.Id == calendarId && 
                                         cd.Date == date) ?? throw new KeyNotFoundException();
     }
 
@@ -114,10 +116,10 @@ public class InMemoryRepository : IRepository
         return route;
     }
 
-    public StopTimeOverride ReadStopTimeOverride(Guid tripId, Guid serviceId, uint stopSequence)
+    public StopTimeOverride ReadStopTimeOverride(Guid tripId, Guid calendarId, uint stopSequence)
     {
         return StopTimeOverrides.Find(sto => sto.Trip.Id == tripId &&
-                                             sto.Calendar.Id == serviceId &&
+                                             sto.Calendar.Id == calendarId &&
                                              sto.StopSequence == stopSequence) ?? throw new KeyNotFoundException();
     }
 
@@ -158,12 +160,20 @@ public class InMemoryRepository : IRepository
 
     public Stop ReadStopByName(string name, string language)
     {
-        Translation translated = Translations.Find(t => t.TableType == TableType.Stops &&
-                                                        t.FieldName == "stop_name" &&
+        Translation translated = Translations.Find(t => t is { TableType: TableType.Stops, FieldName: "stop_name" } &&
                                                         t.Language == language &&
                                                         String.Equals(t.TranslatedValue, name, StringComparison.OrdinalIgnoreCase)) ?? throw new KeyNotFoundException();
         return Stops.Find(s => s.LocationType == LocationType.Station &&
                                String.Equals(s.Name, translated.FieldValue, StringComparison.OrdinalIgnoreCase)) ?? throw new KeyNotFoundException();
+    }
+    
+    public string ReadTranslatedStopName(string name, string language)
+    {
+         string? translation = Translations.Find(t => t is { TableType: TableType.Stops, FieldName: "stop_name" } &&
+                                       t.FieldValue == name &&
+                                       t.Language == language)?.TranslatedValue;
+         if (String.IsNullOrEmpty(translation)) throw new KeyNotFoundException();
+         return translation;
     }
 
     public Trip ReadTrip(Guid id)
@@ -178,9 +188,10 @@ public class InMemoryRepository : IRepository
         return trip;
     }
 
-    public Shape ReadShape(Guid id)
+    public Shape ReadShape(Guid id, uint pointSequence)
     {
-        return Shapes.Find(s => s.Id == id) ?? throw new KeyNotFoundException();
+        return Shapes.Find(s => s.Id == id &&
+                                s.PointSequence == pointSequence) ?? throw new KeyNotFoundException();
     }
 
     public Shape CreateShape(Shape shape)

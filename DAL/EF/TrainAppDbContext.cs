@@ -11,7 +11,6 @@ public class TrainAppDbContext : DbContext
     }
 
     public bool IsInitialized { get; set; }
-
     public DbSet<Agency> Agencies { get; set; }
     public DbSet<Calendar> Calendars { get; set; }
     public DbSet<CalendarDate> CalendarDates { get; set; }

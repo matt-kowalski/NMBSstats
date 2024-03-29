@@ -24,6 +24,7 @@ public class StopTime
     public PickupType PickupType { get; set; }
     [Required]
     public DropoffType DropoffType { get; set; }
+    public double DistanceTraveled { get; set; }
 
     public override string ToString()
     {

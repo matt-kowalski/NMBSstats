@@ -14,7 +14,7 @@ public interface IRepository
     public Calendar CreateCalendar(Calendar calendar);
     
     //CalendarDate
-    public CalendarDate ReadCalendarDate(Guid serviceId, DateOnly date);
+    public CalendarDate ReadCalendarDate(Guid calendarId, DateOnly date);
     public CalendarDate CreateCalendarDate(CalendarDate calendarDate);
     
     //Transfer
@@ -33,7 +33,7 @@ public interface IRepository
     public Route CreateRoute(Route route);
     
     //StopTimeOverride
-    public StopTimeOverride ReadStopTimeOverride(Guid tripId, Guid serviceId, uint stopSequence);
+    public StopTimeOverride ReadStopTimeOverride(Guid tripId, Guid calendarId, uint stopSequence);
     public StopTimeOverride CreateStopTimeOverride(StopTimeOverride stopTimeOverride);
     
     //StopTime
@@ -45,13 +45,14 @@ public interface IRepository
     public Stop CreateStop(Stop stop);
     public void DeleteStop(Stop stop);
     public Stop ReadStopByName(string name, string language);
+    public string ReadTranslatedStopName(string name, string language);
     
     //Trip
     public Trip ReadTrip(Guid id);
     public Trip CreateTrip(Trip trip);
     
     //Shape
-    public Shape ReadShape(Guid id);
+    public Shape ReadShape(Guid id, uint pointSequence);
     public Shape CreateShape(Shape shape);
     
     //Meta

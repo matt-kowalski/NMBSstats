@@ -15,7 +15,7 @@ public class Shape
     public double Latitude { get; set; }
     [Required]
     public double Longitude { get; set; }
-    [Required]
+    [Key]
     public uint PointSequence { get; set; }
     public double DistanceTraveled { get; set; }
 }

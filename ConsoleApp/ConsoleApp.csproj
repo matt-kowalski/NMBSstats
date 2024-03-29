@@ -14,13 +14,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="rawdata\*">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="rawdata\" />
+        <Content Include="$(SolutionDir)gtfs\*" Condition="'$(Configuration)' == 'Debug'">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <LinkBase>gtfs</LinkBase>
+        </Content>
+        <Content Include="$(SolutionDir)gtfs\*" Condition="'$(Configuration)' == 'Release'">
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <LinkBase>gtfs</LinkBase>
+        </Content>
     </ItemGroup>
 
 </Project>
