@@ -1,9 +1,14 @@
-﻿using TrainApp.Domain;
-using TrainApp.BL;
-using TrainApp.DAL;
+﻿using TrainApp.BL;
 using TrainApp.DAL.IMR;
+using TrainApp.Domain.GTFS;
 
 
-string rawdata = Environment.CurrentDirectory + "/rawdata";
-InMemoryRepository repository = new InMemoryRepository(rawdata);
-repository.Seed();
+InMemoryRepository repository = new InMemoryRepository();
+Manager man = new Manager(repository);
+
+Console.WriteLine("station,lat,lon");
+foreach (Stop station in man.GetAllStations())
+{
+    string translatedName = man.GetTranslation("nl", station.Name).TranslatedValue;
+    Console.Out.WriteLine($"{translatedName},{station.Latitude},{station.Longitude}");
+}

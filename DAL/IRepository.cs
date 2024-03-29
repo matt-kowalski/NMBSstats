@@ -9,10 +9,8 @@ public interface IRepository
     // Agency
     public Agency ReadAgency(Guid id);
     public Agency CreateAgency(Agency agency);
-    public Agency ReadAgencyByName(string name);
-    
     //Calendar
-    public Calendar ReadCalendar(Guid serviceId);
+    public Calendar ReadCalendar(Guid id);
     public Calendar CreateCalendar(Calendar calendar);
     
     //CalendarDate
@@ -25,13 +23,13 @@ public interface IRepository
     public Transfer CreateTransfer(Transfer transfer);
     
     //Translation
-    public Translation ReadTranslation(TableName tableName, string fieldName, 
-        CultureInfo language, string fieldValue);
+    public Translation ReadTranslation(TableType tableType, string fieldName, 
+        string language, string fieldValue);
     
     public Translation CreateTranslation(Translation translation);
     
     //Route
-    public Route ReadRoute(Guid routeId);
+    public Route ReadRoute(Guid id);
     public Route CreateRoute(Route route);
     
     //StopTimeOverride
@@ -43,10 +41,19 @@ public interface IRepository
     public StopTime CreateStopTime(StopTime stopTime);
     
     //Stop
-    public Stop ReadStop(Guid stopId);
+    public Stop ReadStop(Guid id);
     public Stop CreateStop(Stop stop);
+    public void DeleteStop(Stop stop);
+    public Stop ReadStopByName(string name, string language);
     
     //Trip
-    public Trip ReadTrip(Guid tripId);
+    public Trip ReadTrip(Guid id);
     public Trip CreateTrip(Trip trip);
+    
+    //Shape
+    public Shape ReadShape(Guid id);
+    public Shape CreateShape(Shape shape);
+    
+    //Meta
+    public IEnumerable<Stop> ReadAllStations();
 }

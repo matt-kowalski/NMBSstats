@@ -1,4 +1,7 @@
-﻿namespace TrainApp.Domain.GTFS;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TrainApp.Domain.GTFS;
 
 public class Route
 {
@@ -7,15 +10,18 @@ public class Route
         
     }
 
+    [Key]
     public Guid Id { get; set; }
-    public Guid AgencyId { get; set; }
-    public string ShortName { get; set; }
+    [Required]
+    public Agency Agency { get; set; }
+    public string RouteTypeName { get; set; }
     public string LongName { get; set; }
+    [Required]
     public RouteType RouteType { get; set; }
 
     public override string ToString()
     {
-        return $"{RouteType}: {ShortName} {LongName}";
+        return $"{RouteType}: {RouteTypeName} {LongName}";
     }
 }
 

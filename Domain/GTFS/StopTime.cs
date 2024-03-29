@@ -1,4 +1,7 @@
-﻿namespace TrainApp.Domain.GTFS;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TrainApp.Domain.GTFS;
 
 public class StopTime
 {
@@ -6,18 +9,25 @@ public class StopTime
     {
         
     }
-
-    public Guid TripId { get; set; }
+    
+    [Key]
+    public Trip Trip { get; set; }
+    [Required]
     public TimeOnly ArrivalTime { get; set; }
+    [Required]
     public TimeOnly DepartureTime { get; set; }
-    public Guid StopId { get; set; }
+    [Required]
+    public Stop Stop { get; set; }
+    [Key]
     public uint StopSequence { get; set; }
+    [Required]
     public PickupType PickupType { get; set; }
+    [Required]
     public DropoffType DropoffType { get; set; }
 
     public override string ToString()
     {
-        return $"Trip {TripId} has stop at {StopId} with sequence {StopSequence}.\n" +
+        return $"Trip {Trip.Headsign} has stop at {Stop.Name} with sequence {StopSequence}.\n" +
                $"{ArrivalTime} - {DepartureTime}\n" +
                $"Pickup: {PickupType}\n" +
                $"Dropoff: {DropoffType}\n";

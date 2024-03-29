@@ -1,4 +1,7 @@
-﻿namespace TrainApp.Domain.GTFS;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TrainApp.Domain.GTFS;
 
 public class Trip
 {
@@ -7,17 +10,23 @@ public class Trip
         
     }
 
+    [Key]
     public Guid Id { get; set; }
-    public Guid RouteId { get; set; }
-    public Guid ServiceId { get; set; }
-    public string ShortName { get; set; }
-    public string LongName { get; set; }
-    public Guid BlockId { get; set; }
-    public TripType TripType { get; set; }
-}
+    [Required]
+    public Route Route { get; set; }
+    [Required]
+    public Calendar Calendar { get; set; }
 
-public enum TripType : byte
-{
-    Unknown = 0,
-    Type1 = 1,
+    [Required]
+    public string Headsign { get; set; }
+
+    [Required]
+    public string TrainName { get; set; }
+    public Shape Shape { get; set; }
+    public Guid BlockId { get; set; }
+
+    public override string ToString()
+    {
+        return $"Trip {Id} to {Headsign} on train {TrainName}";
+    }
 }

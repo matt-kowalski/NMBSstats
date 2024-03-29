@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using TrainApp.DAL;
+﻿using TrainApp.DAL;
 using TrainApp.Domain.GTFS;
 using Calendar = TrainApp.Domain.GTFS.Calendar;
 
@@ -19,7 +18,7 @@ public class Manager : IManager
         return _rep.ReadAgency(id);
     }
 
-    public Agency AddAgency(string name, string url, TimeZoneInfo timezone, CultureInfo language)
+    public Agency AddAgency(string name, string url, TimeZoneInfo timezone, string language)
     {
         Agency agency = new Agency()
         {
@@ -86,17 +85,18 @@ public class Manager : IManager
         return _rep.CreateTransfer(transfer);
     }
 
-    public Translation GetTranslation(TableName tableName, string fieldName, CultureInfo language, string fieldValue)
+    public Translation GetTranslation(string language, string fieldValue, TableType tableType = TableType.Stops,
+        string fieldName = "stop_name")
     {
-        return _rep.ReadTranslation(tableName, fieldName, language, fieldValue);
+        return _rep.ReadTranslation(tableType, fieldName, language, fieldValue);
     }
 
-    public Translation AddTranslation(TableName tableName, string fieldName, CultureInfo language, string translatedValue,
+    public Translation AddTranslation(TableType tableType, string fieldName, string language, string translatedValue,
         string fieldValue)
     {
         Translation translation = new Translation()
         {
-            TableName = tableName,
+            TableType = tableType,
             FieldName = fieldName,
             Language = language,
             TranslatedValue = translatedValue,
@@ -180,22 +180,32 @@ public class Manager : IManager
         return _rep.CreateStop(stop);
     }
 
+    public Stop GetStopByName(string name, string language = "nl")
+    {
+        return _rep.ReadStopByName(name, language);
+    }
+
     public Trip GetTrip(Guid id)
     {
         return _rep.ReadTrip(id);
     }
 
-    public Trip AddTrip(Guid routeId, Guid serviceId, string shortName, string longName, Guid blockId, TripType tripType)
+    public Trip AddTrip(Guid routeId, Guid serviceId, string headsign, string shortName, Guid blockId, TripType tripType)
     {
         Trip trip = new Trip()
         {
             RouteId = routeId,
             ServiceId = serviceId,
+            Headsign = headsign,
             ShortName = shortName,
-            LongName = longName,
             BlockId = blockId,
             TripType = tripType
         };
         return _rep.CreateTrip(trip);
+    }
+
+    public List<Stop> GetAllStations()
+    {
+        return _rep.ReadAllStations();
     }
 }

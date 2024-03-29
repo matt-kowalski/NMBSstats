@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace TrainApp.Domain.GTFS;
 
@@ -8,20 +9,24 @@ public class Translation
     {
         
     }
-
-    public TableName TableName { get; set; }
+    
+    [Key]
+    public TableType TableType { get; set; }
+    [Key]
     public string FieldName { get; set; }
-    public CultureInfo Language { get; set; }
-    public string TranslatedValue { get; set; }
+    [Key]
+    public string Language { get; set; }
+    [Key]
     public string FieldValue { get; set; }
+    public string TranslatedValue { get; set; }
 
     public override string ToString()
     {
-        return $"[{TableName} {FieldName}] {FieldValue} in {Language.DisplayName} is: {TranslatedValue}";
+        return $"[{TableType} {FieldName}] {FieldValue} in {Language} is: {TranslatedValue}";
     }
 }
 
-public enum TableName : byte
+public enum TableType : byte
 {
     Agency = 0,
     Stops = 1,

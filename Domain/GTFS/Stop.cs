@@ -1,4 +1,6 @@
-﻿namespace TrainApp.Domain.GTFS;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TrainApp.Domain.GTFS;
 
 public class Stop
 {
@@ -7,19 +9,24 @@ public class Stop
         
     }
 
+    [Key]
     public Guid Id { get; set; }
+    [Required]
     public string Name { get; set; }
+    [Required]
     public double Latitude { get; set; }
+    [Required]
     public double Longitude { get; set; }
+    [Required]
     public LocationType LocationType { get; set; }
-    public Guid? ParentStationStopId { get; set; }
-    public string? PlatformCode { get; set; }
+    public Stop? ParentStop { get; set; }
+    public string? Platform { get; set; }
 
     public override string ToString()
     {
-        if (ParentStationStopId != null)
+        if (LocationType == LocationType.Platform)
             return $"{Id} {Name} at {Latitude} {Longitude}\n" +
-                   $"With parent station {ParentStationStopId} {PlatformCode}";
+                   $"With parent station {ParentStop!.Name} {Platform}";
         return $"{Id} {Name} at {Latitude} {Longitude}";
     }
 }

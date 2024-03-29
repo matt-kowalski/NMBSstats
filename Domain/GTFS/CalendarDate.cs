@@ -1,4 +1,7 @@
-﻿namespace TrainApp.Domain.GTFS;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TrainApp.Domain.GTFS;
 
 public class CalendarDate
 {
@@ -6,14 +9,16 @@ public class CalendarDate
     {
         
     }
-
-    public Guid ServiceId { get; set; }
+    
+    [Key]
+    public Calendar Calendar { get; set; }
+    [Key]
     public DateOnly Date { get; set; }
     public DateExceptionType DateException { get; set; }
 
     public override string ToString()
     {
-        return $"{Date}: {DateException} for {ServiceId}";
+        return $"{Date}: {DateException} for {Calendar.Id}";
     }
 }
 

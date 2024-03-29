@@ -1,4 +1,6 @@
-﻿namespace TrainApp.Domain.GTFS;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TrainApp.Domain.GTFS;
 
 public class Transfer
 {
@@ -6,15 +8,17 @@ public class Transfer
     {
         
     }
-
-    public Guid FromStopId { get; set; }
-    public Guid ToStopId { get; set; }
+    [Key]
+    public Stop FromStop { get; set; }
+    [Key]
+    public Stop ToStop { get; set; }
+    [Required]
     public TransferType TransferType { get; set; }
     public uint? MinTransferTime { get; set; }
 
     public override string ToString()
     {
-        return $"{FromStopId} to {ToStopId} with {TransferType} {MinTransferTime}";
+        return $"{FromStop.Name} to {ToStop.Name} with {TransferType} {MinTransferTime}";
     }
 }
 

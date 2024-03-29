@@ -8,7 +8,7 @@ public interface IManager
 {
     // Agency
     public Agency GetAgency(Guid id);
-    public Agency AddAgency(string name, string url, TimeZoneInfo timezone, CultureInfo language);
+    public Agency AddAgency(string name, string url, TimeZoneInfo timezone, string language);
     
     //Calendar
     public Calendar GetCalendar(Guid id);
@@ -26,10 +26,9 @@ public interface IManager
         uint? minTransferTime = null);
     
     //Translation
-    public Translation GetTranslation(TableName tableName, string fieldName, 
-        CultureInfo language, string fieldValue);
+    public Translation GetTranslation(string language, string fieldValue, TableType tableType = TableType.Stops, string fieldName = "stop_name");
     
-    public Translation AddTranslation(TableName tableName, string fieldName, CultureInfo language, string translatedValue, 
+    public Translation AddTranslation(TableType tableType, string fieldName, string language, string translatedValue, 
         string fieldValue);
     
     //Route
@@ -49,9 +48,14 @@ public interface IManager
     public Stop GetStop(Guid id);
     public Stop AddStop(string name, double latitude, double longitude, LocationType locationType, 
         Guid? parentStationStopId = null, string? platformCode = null);
+
+    public Stop GetStopByName(string name, string language = "nl");
     
     //Trip
     public Trip GetTrip(Guid id);
-    public Trip AddTrip(Guid routeId, Guid serviceId, string shortName, string longName, Guid blockId, 
+    public Trip AddTrip(Guid routeId, Guid serviceId, string headsign, string shortName, Guid blockId, 
         TripType tripType);
+    
+    //Meta
+    public List<Stop> GetAllStations();
 }

@@ -1,4 +1,6 @@
-﻿namespace TrainApp.Domain.GTFS;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TrainApp.Domain.GTFS;
 
 public class Calendar
 {
@@ -6,16 +8,26 @@ public class Calendar
     {
         
     }
-
+    
+    [Key]
     public Guid Id { get; set; }
-    public Monday Monday { get; set; }
-    public Tuesday Tuesday { get; set; }
-    public Wednesday Wednesday { get; set; }
-    public Thursday Thursday { get; set; }
-    public Friday Friday { get; set; }
-    public Saturday Saturday { get; set; }
-    public Sunday Sunday { get; set; }
+    [Required]
+    public DateAvailability Monday { get; set; }
+    [Required]
+    public DateAvailability Tuesday { get; set; }
+    [Required]
+    public DateAvailability Wednesday { get; set; }
+    [Required]
+    public DateAvailability Thursday { get; set; }
+    [Required]
+    public DateAvailability Friday { get; set; }
+    [Required]
+    public DateAvailability Saturday { get; set; }
+    [Required]
+    public DateAvailability Sunday { get; set; }
+    [Required]
     public DateOnly StartDate { get; set; }
+    [Required]
     public DateOnly EndDate { get; set; }
 
     public override string ToString()
@@ -26,43 +38,7 @@ public class Calendar
     }
 }
 
-public enum Monday : byte
-{
-    NotAvailable = 0,
-    Available = 1
-}
-
-public enum Tuesday : byte
-{
-    NotAvailable = 0,
-    Available = 1
-}
-
-public enum Wednesday : byte
-{
-    NotAvailable = 0,
-    Available = 1
-}
-
-public enum Thursday : byte
-{
-    NotAvailable = 0,
-    Available = 1
-}
-
-public enum Friday : byte
-{
-    NotAvailable = 0,
-    Available = 1
-}
-
-public enum Saturday : byte
-{
-    NotAvailable = 0,
-    Available = 1
-}
-
-public enum Sunday : byte
+public enum DateAvailability : byte
 {
     NotAvailable = 0,
     Available = 1
